@@ -11,11 +11,11 @@
  */
 
 static uint8_t sensorHeight = 0;
-static uint8_t setpoint = 80; 
+static uint8_t setpoint = 160; 
 static int error = 0;
 static float integral = 0;
 static float ki = 0.004;
-static float kp = 0.4;
+static float kp = 2;
 static int dutycycle;
 static float P;
 static float I;
@@ -44,7 +44,7 @@ float PI_GetKp(void) {
 }
 
 void PI_SetKi(float value) {
-    ki = value*0.033;
+    ki = value;
 }
 float PI_GetKi(void) {
     return ki;
@@ -63,11 +63,11 @@ void PI(void) {
     integral += error;
     I = integral * ki;
     
-    dutycycle = P +I;
+    dutycycle = (int) (P + I);
     
-    if (dutycycle > 255)
+    if (dutycycle > 1023)
     {
-        dutycycle = 255;
+        dutycycle = 1023;
     }  
     
     if (dutycycle < 0)
